@@ -1,0 +1,22 @@
+{
+  "name": "angular-2-starter-project",
+  "description": "ng2 starter project",
+  "main": "/",
+  "authors": [
+    "Oleg Shalygin"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/oshalygin/Angular2Starter",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.6"
+  },
+  "devDependencies": {}
+}

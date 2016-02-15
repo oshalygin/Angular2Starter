@@ -4,6 +4,9 @@ module.exports = function () {
     var excludeNodeModulesDirectory = "!node_modules/**";
     var karmaConfig = __dirname + "/karma.conf.js";
     var solutionsPath = "./solutions";
+    var bowerJson = require("./bower.json");
+    var layoutInjector = "./wwwroot/index.html";
+    var layout = "./wwwroot/";
 
     var config = {
         solutionsJavaScriptFiles: solutionsJavaScriptFiles,
@@ -12,10 +15,43 @@ module.exports = function () {
         typeScriptFiles: solutionsPath + "/**/*.ts",
         tsTypingDefinitions: "./typings/**/*.d.ts",
         solutionsPath: solutionsPath,
+        layoutInjector: layoutInjector,
+        layoutPage: layout,
+        bowerFiles: "bower_components/**",
+        bower: {
+            json: bowerJson,
+            directory: "/bower_components",
+            ignorePath: "../.."
+
+        },
 
         nodePort: 3000,
         nodeServer: "./server.js"
     };
+
+    config.getWiredepDefaultOptions = function () {
+
+
+        var options = {
+            bowerJson: config.bower.json,
+            directory: config.bower.directory,
+           // ignorePath: config.bower.ignorePath,
+            fileTypes: {
+                html: {
+                    replace: {
+                        // ReSharper disable once StringLiteralWrongQuotes
+                        js: '<script src="~{{filePath}}"></script>', // jshint ignore:line
+                        css: '<link rel="stylesheet" href="~{{filePath}}" />' // jshint ignore:line
+                    }
+                }
+            }
+
+
+        };
+
+        return options;
+    };
+
 
     return config;
 };
