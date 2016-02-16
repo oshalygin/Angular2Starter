@@ -1,12 +1,12 @@
 "use strict";
 
-let gulp = require("gulp");
-let config = require("./gulp.config")();
-let $ = require("gulp-load-plugins")({ lazy: true });
-let wiredep = require("wiredep").stream;
+var gulp = require("gulp");
+var config = require("./gulp.config")();
+var $ = require("gulp-load-plugins")({ lazy: true });
+var wiredep = require("wiredep").stream;
 
 
-gulp.task("tslint", function () {
+gulp.task("tslint", () => {
     log("** TSLint Check **");
 
     return gulp
@@ -17,7 +17,35 @@ gulp.task("tslint", function () {
 });
 
 
-gulp.task("wiredep-app", function () {
+gulp.task("eslint", () => {
+    log("*** Validating via ESLint ** ");
+
+    return gulp.src([config.solutionsJavaScriptFiles, config.excludeNodeModulesDirectory])
+        .pipe($.eslint({
+            config: "eslint.config.json"
+        }))
+        .pipe($.eslint.format())
+        .pipe($.eslint.failAfterError());
+});
+
+gulp.task("transpile", () => {
+
+    log("** Transpiling Dev Folder **");
+
+    let typescriptOptions = {
+
+        removeComments: false,
+        target: "es6",
+        noImplicitAny: true
+    };
+
+    return gulp
+        .src([config.typeScriptFiles, config.tsTypingDefinitions])
+        .pipe($.typescript(typescriptOptions))
+        .pipe(gulp.dest(config.applicationPath));
+});
+
+gulp.task("wiredep-app", () => {
     log("*** Wiring up bower css, js and application into html page");
 
     var options = config.getWiredepDefaultOptions();
@@ -26,12 +54,8 @@ gulp.task("wiredep-app", function () {
         .src(config.layoutInjector)
         .pipe(wiredep(options))
         .pipe($.inject(gulp.src(config.js,
-            { read: false }), {
-                transform: function (filepath) {
-                    // ReSharper disable once StringLiteralWrongQuotes
-                    return '<script src="~' + filepath + '"></script>'; // jshint ignore:line
-                }
-            }
+            { read: false }),
+            { relative: true }
             ))
         .pipe(gulp.dest(config.layoutPage));
 

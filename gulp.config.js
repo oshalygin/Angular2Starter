@@ -1,9 +1,9 @@
 module.exports = function () {
 
-    var solutionsJavaScriptFiles = "solutions/**/*.js";
+    var solutionsJavaScriptFiles = "app/**/*.js";
     var excludeNodeModulesDirectory = "!node_modules/**";
     var karmaConfig = __dirname + "/karma.conf.js";
-    var solutionsPath = "./solutions";
+    var applicationPath = "./app";
     var bowerJson = require("./bower.json");
     var layoutInjector = "./wwwroot/index.html";
     var layout = "./wwwroot/";
@@ -12,18 +12,27 @@ module.exports = function () {
         solutionsJavaScriptFiles: solutionsJavaScriptFiles,
         excludeNodeModulesDirectory: excludeNodeModulesDirectory,
         karmaConfiguration: karmaConfig,
-        typeScriptFiles: solutionsPath + "/**/*.ts",
+        typeScriptFiles: applicationPath + "/**/*.ts",
         tsTypingDefinitions: "./typings/**/*.d.ts",
-        solutionsPath: solutionsPath,
+        applicationPath: applicationPath,
         layoutInjector: layoutInjector,
         layoutPage: layout,
-        bowerFiles: "bower_components/**",
+        bowerFiles: "/bower_components/**",
         bower: {
             json: bowerJson,
-            directory: "/bower_components",
+            directory: "./bower_components/",
             ignorePath: "../.."
 
         },
+
+
+        js: [
+            applicationPath + "/**/*.js",
+        ],
+
+        appTypeScriptFiles: [
+            applicationPath + "**/*.ts"
+        ],
 
         nodePort: 3000,
         nodeServer: "./server.js"
